@@ -1,9 +1,11 @@
+// 1. import any needed libraries
 const express = require("express");
-const User = require('../models/user'); //accesses functions in user model file
+const User = require('../models/user.js'); //accesses functions in user model file
 const router = express.Router();
 
+// 2. create all routes to access database
 router
-  .post('/login', async (req, res) => {    //using post instead of get so that parameters are not visible in url
+  .post('/login', async (req, res) => {
     try {
       const user = await User.login(req.body.username, req.body.password);
       res.send({...user, password: undefined});
@@ -39,4 +41,5 @@ router
     }
   })
 
-  module.exports = router;
+// 3. export router for use in index.js
+module.exports = router;

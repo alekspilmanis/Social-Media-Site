@@ -1,3 +1,5 @@
+
+
 // 1. import mongoose
 const mongoose = require("mongoose");
 const bcrypt = require('bcryptjs');
@@ -6,6 +8,7 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true},
   password: { type: String, required: true},
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
   followers: [String],
   following: [String]
 })
@@ -21,7 +24,6 @@ async function register(username, password) {
 
   const salt = await bcrypt.genSalt(10);
   const hashed = await bcrypt.hash(password, salt);
-
 
   const newUser = await User.create({
     username: username,
@@ -58,6 +60,7 @@ async function deleteUser(id) {
 async function getUser(username) {
   return await User.findOne({ "username": username});
 }
+
 
 // 5. export all functions we want to access in route files
 module.exports = { 

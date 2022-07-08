@@ -14,7 +14,7 @@ router
 
   .post('/createPost', async (req, res) => {
     try {
-      const post = await Post.createPost(req.body.userId, req.body.postContent);
+      const post = await Post.createPost(req.body.postContent);
       res.send({post});
     } catch(error) {
       res.status(401).send({ message: error.message });
@@ -23,7 +23,7 @@ router
 
   .put('/updatePost', async (req, res) => {
     try {
-      const post = await Post.updatePost(req.body.userId, req.body.postId, req.body.updatedContent);
+      const post = await Post.updatePost(req.body.postId, req.body.updatedContent);
       res.send({post});
     } catch(error) {
       res.status(401).send({ message: error.message });
@@ -32,7 +32,7 @@ router
 
   .delete('/deletePost', async (req, res) => {
     try {
-      await Post.deletePost(req.body.userId, req.body.postId);
+      await Post.deletePost(req.body.postId);
       res.send({ success: "Post deleted" });
     } catch(error) {
       res.status(401).send({ message: error.message });
