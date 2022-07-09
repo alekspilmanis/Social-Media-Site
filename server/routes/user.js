@@ -14,6 +14,24 @@ router
     }
   })
 
+  .post('/deletePost', async (req, res) => {
+    try {
+     const posts = await User.deletePost(req.body.username);
+      res.send(posts);
+    } catch(error) {
+      res.status(401).send({ message: error.message });
+    }
+  })
+
+  .post('/getPosts', async (req, res) => {
+    try {
+      const posts = await User.getPosts(req.body.username);
+      res.send(posts);
+    } catch(error) {
+      res.status(401).send({ message: error.message });
+    }
+  })
+
   .post('/register', async (req, res) => {
     try {
       const user = await User.register(req.body.username, req.body.password);
@@ -27,6 +45,15 @@ router
     try {
       const user = await User.updatePassword(req.body.id, req.body.password);
       res.send({...user, password: undefined});
+    } catch(error) {
+      res.status(401).send({ message: error.message });
+    }
+  })
+
+  .put('/createPost', async (req, res) => {
+    try {
+      await User.createPost(req.body.postContent, req.body.username);
+      res.send({ success: "Post Created" });
     } catch(error) {
       res.status(401).send({ message: error.message });
     }

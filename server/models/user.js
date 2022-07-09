@@ -6,9 +6,9 @@ const bcrypt = require('bcryptjs');
 
 // 2. create schema for entity
 const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true, required: true},
-  password: { type: String, required: true},
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+  username: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
+  posts: [String],
   followers: [String],
   following: [String]
 })
@@ -33,6 +33,18 @@ async function register(username, password) {
   return newUser._doc;
 }
 
+//Create a post, add it to array
+async function createPost(postContent, username) {
+   const user = await User.updateOne({"username": username}, {$addToSet: { posts: postContent}});
+}
+
+//Find posts
+async function getPosts(username) {
+  const posts = await User.findOne({"username": username});
+  return posts.posts;
+}
+
+
 // READ a user
 async function login(username, password) {
   const user = await getUser(username);
@@ -51,6 +63,13 @@ async function updatePassword(id, password) {
   return user;
 }
 
+//Delete Post
+async function deletePost(username) {
+  await User.updateOne({"username": username}, {$pop: { posts: 1 }});
+  const posts = await User.findOne({"username": username});
+  return posts.posts;
+}
+
 //DELETE
 async function deleteUser(id) {
   await User.deleteOne({"_id": id});
@@ -64,5 +83,5 @@ async function getUser(username) {
 
 // 5. export all functions we want to access in route files
 module.exports = { 
-  register, login, updatePassword, deleteUser 
+  register, login, updatePassword, deleteUser, createPost, getPosts, deletePost
 };
