@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../../context/userContext.js";
 
-//Use navigate to go to profile page
 
 const Login = () => {
 
@@ -27,7 +26,7 @@ const Login = () => {
     .then((data) => {
       if(!data.message) {
         console.log(data)
-        updateUser("autheticated", true)
+        updateUser("authenticated", true)
         navigate("/profile") 
       }
     })  
